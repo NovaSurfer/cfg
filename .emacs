@@ -30,7 +30,7 @@ If FRAME is omitted or nil, use currently selected frame."
  '(custom-safe-themes
    '("c83a4eb86ca80750c7bd4f2715649e2566c2457b91ca18c3037fd4345239c075" default))
  '(package-selected-packages
-   '(all-the-icons nov magit cmake-mode dashboard lsp-ui dap-mode which-key lsp-mode)))
+   '(company yasnippet all-the-icons nov magit cmake-mode dashboard lsp-ui dap-mode which-key lsp-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -45,6 +45,12 @@ If FRAME is omitted or nil, use currently selected frame."
 
 ;; enable line numbers
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+(setq pixel-scroll-precision-mode t)
+(setq-default indent-tabs-mode nil)        ;; Disable indent with tabs
+(setq tab-width 4)
+(defvaralias 'c-basic-offset 'tab-width)
+(setq indent-line-function 'insert-tab)
+
 ;; align code more to the center
 ;;(add-hook 'prog-mode-hook (lambda ()
 ;;  (setq left-margin-width 10)))
@@ -72,10 +78,7 @@ If FRAME is omitted or nil, use currently selected frame."
   :init
   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
   (setq lsp-keymap-prefix "C-c l")
-  ;; turn off snippet
-  (setq lsp-enable-snippet nil)
-  (setq lsp-completion-provider :none)
-;;  (setq lsp-completion-enable-additional-text-edit nil)
+  (setq lsp-completion-provider :capf)
   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
          (c++-mode . lsp)
          (c-mode . lsp)
@@ -83,6 +86,12 @@ If FRAME is omitted or nil, use currently selected frame."
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp
   :custom (lsp-headerline-breadcrumb-enable t))
+
+  ;; Arguments given to clangd server. See https://emacs-lsp.github.io/lsp-mode/lsp-mode.html#lsp-clangd
+(setq lsp-clients-clangd-args '(
+				"--clang-tidy"
+				))
+
 
 ;; ........................ enabling Ido
 (require 'ido)
@@ -129,6 +138,8 @@ If FRAME is omitted or nil, use currently selected frame."
 ;; .................... epub reader
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 
+
+;; .................... modeline
 (when (display-graphic-p)
   (require 'all-the-icons))
 
@@ -174,3 +185,10 @@ If FRAME is omitted or nil, use currently selected frame."
                     :box nil
                     :overline nil
                     :underline nil)
+
+;; ............... Code completion
+(require 'company)
+(add-hook 'after-init-hook 'global-company-mode)
+(setq company-backends '((company-capf company-clang)))
+
+

@@ -46,10 +46,12 @@ If FRAME is omitted or nil, use currently selected frame."
 ;; enable line numbers
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 (setq pixel-scroll-precision-mode t)
-(setq-default indent-tabs-mode nil)        ;; Disable indent with tabs
-(setq tab-width 4)
-(defvaralias 'c-basic-offset 'tab-width)
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
 (setq indent-line-function 'insert-tab)
+(setq c-default-style "linux") 
+(setq c-basic-offset 4) 
+(c-set-offset 'comment-intro 0)
 
 ;; align code more to the center
 ;;(add-hook 'prog-mode-hook (lambda ()
@@ -79,6 +81,7 @@ If FRAME is omitted or nil, use currently selected frame."
   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
   (setq lsp-keymap-prefix "C-c l")
   (setq lsp-completion-provider :capf)
+  (setq lsp-enable-indentation nil)
   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
          (c++-mode . lsp)
          (c-mode . lsp)

@@ -30,7 +30,7 @@ If FRAME is omitted or nil, use currently selected frame."
  '(custom-safe-themes
    '("c83a4eb86ca80750c7bd4f2715649e2566c2457b91ca18c3037fd4345239c075" default))
  '(package-selected-packages
-   '(company yasnippet all-the-icons nov magit cmake-mode dashboard lsp-ui dap-mode which-key lsp-mode)))
+   '(lsp-java magit company yasnippet all-the-icons nov cmake-mode dashboard lsp-ui dap-mode which-key lsp-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -46,16 +46,35 @@ If FRAME is omitted or nil, use currently selected frame."
 ;; enable line numbers
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 (setq pixel-scroll-precision-mode t)
-(setq-default indent-tabs-mode nil)
+(setq-default indent-tabs-mode nil) ;; Disable indent with tabs
 (setq-default tab-width 4)
 (setq indent-line-function 'insert-tab)
 (setq c-default-style "linux") 
 (setq c-basic-offset 4) 
+(setq c-basic-indent 4)
 (c-set-offset 'comment-intro 0)
+
+;; when enabled all compound words with "_" or "-" treated as a single word
+(global-superword-mode t)
+
+(tool-bar-mode 0)
+(menu-bar-mode 0)
+(scroll-bar-mode 0)
+(column-number-mode 1)
+(show-paren-mode 1)
+
+;; remember and restore the last cursor location of opened files
+(save-place-mode 1)
+
+;; revert (refresh) buffers when the underlying files has changed
+(global-auto-revert-mode 1)
+
+;; duplicate line
+(global-set-key (kbd "C-,") 'duplicate-line)
 
 ;; align code more to the center
 ;;(add-hook 'prog-mode-hook (lambda ()
-;;  (setq left-margin-width 10)))
+;;(setq left-margin-width 10)))
 
 ;; ....................... Dashboard
 (require 'dashboard)
@@ -85,6 +104,7 @@ If FRAME is omitted or nil, use currently selected frame."
   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
          (c++-mode . lsp)
          (c-mode . lsp)
+         (java-mode . lsp)
          ;; if you want which-key integration
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp
@@ -94,7 +114,7 @@ If FRAME is omitted or nil, use currently selected frame."
 (setq lsp-clients-clangd-args '(
 				"--clang-tidy"
 				))
-
+(yas-global-mode 1)
 
 ;; ........................ enabling Ido
 (require 'ido)

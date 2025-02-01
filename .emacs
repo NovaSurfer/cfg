@@ -30,7 +30,7 @@ If FRAME is omitted or nil, use currently selected frame."
  '(custom-safe-themes
    '("c83a4eb86ca80750c7bd4f2715649e2566c2457b91ca18c3037fd4345239c075" default))
  '(package-selected-packages
-   '(lsp-java magit company yasnippet all-the-icons nov cmake-mode dashboard lsp-ui dap-mode which-key lsp-mode)))
+   '(modern-cpp-font-lock lsp-java magit company yasnippet all-the-icons nov cmake-mode dashboard lsp-ui dap-mode which-key lsp-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -114,7 +114,14 @@ If FRAME is omitted or nil, use currently selected frame."
 (setq lsp-clients-clangd-args '(
 				"--clang-tidy"
 				))
+
+(require 'yasnippet)
 (yas-global-mode 1)
+
+;; ........................ font lock for modern C++
+(use-package modern-cpp-font-lock
+  :ensure t)
+(modern-c++-font-lock-global-mode t)
 
 ;; ........................ enabling Ido
 (require 'ido)
